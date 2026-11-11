@@ -14,33 +14,31 @@ const animals=[
 let selected=animals[0],qIndex=0,score=0,answered=false,completed=false;
 const order=[1,3,0,4,2,5,6,7,8,9];
 const $=s=>document.querySelector(s);
+const audioFiles={
+ lion:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=a855793f55e2435aa8bf66c9b4c29a72.mp3",
+ elephant:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=03f2c659f3874bd1a473ea6b163cab48.mp3",
+ giraffe:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=9e0d68682df448c29aa94336ef782268.mp3",
+ camel:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=2ab840fb9b68488cbe2623d08b24fce0.mp3",
+ rabbit:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=27fc955d3bd64af6b1a6b81ccfb956b3.mp3",
+ zebra:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=504561a1382a47b09fafa3b4019d8b30.mp3",
+ monkey:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=bc23dd895900466e8b6aeae404b7e625.mp3",
+ cow:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=80ab799f84ac44da9f113da28b81b0b4.mp3",
+ horse:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=cbfbacbbe86c46caafabe1e7815f049a.mp3",
+ goat:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=3ddb67c260f44eadb9069c83d1d4a529.mp3"
+};
+let currentAudio=null;
 function speak(word){
- const guide="Matamshi ya kuongoza: "+selected.say;
- if(!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)){
-  $("#focus-pronunciation").textContent="Kivinjari hiki hakina huduma ya sauti. "+guide;return;
- }
- const synth=window.speechSynthesis;
- synth.cancel();
- $("#focus-pronunciation").textContent="Inatafuta sauti ya Kiarabu…";
- const sayNow=()=>{
-  const voices=synth.getVoices();
-  const voice=voices.find(v=>/^ar([_-]|$)/i.test(v.lang)) || voices.find(v=>v.lang.toLowerCase().includes("ar"));
-  const utterance=new SpeechSynthesisUtterance(word);
-  utterance.lang=voice?voice.lang:"ar-SA";
-  if(voice)utterance.voice=voice;
-  utterance.rate=0.78;utterance.pitch=1;
-  utterance.onstart=()=>{$("#focus-pronunciation").textContent="Inasoma kwa sauti ya Kiarabu…";};
-  utterance.onend=()=>{$("#focus-pronunciation").textContent="Imemaliza kusoma. "+guide;};
-  utterance.onerror=()=>{$("#focus-pronunciation").textContent="Sauti haijapatikana. "+guide+" Hakikisha Arabic voice imewekwa kwenye simu.";};
-  synth.speak(utterance);
- };
- if(synth.getVoices().length){sayNow();}
- else{
-  let done=false;
-  const finish=()=>{if(done)return;done=true;synth.removeEventListener("voiceschanged",finish);sayNow();};
-  synth.addEventListener("voiceschanged",finish);
-  setTimeout(finish,1200);
- }
+ const animal=animals.find(a=>a.ar===word)||selected;
+ const audioUrl=audioFiles[animal.id];
+ if(!audioUrl){$("#focus-pronunciation").textContent="Sauti haijapatikana.";return;}
+ if(currentAudio){currentAudio.pause();currentAudio.currentTime=0;}
+ currentAudio=new Audio(audioUrl);
+ $("#focus-pronunciation").textContent="Mwalimu Bilal anatamka: "+animal.say.toUpperCase();
+ currentAudio.play().then(()=>{
+  currentAudio.onended=()=>{$("#focus-pronunciation").textContent="Sikiliza tena na urudie: "+animal.say.toUpperCase();};
+ }).catch(()=>{
+  $("#focus-pronunciation").textContent="Sauti haikuweza kuchezwa. Angalia intaneti kisha jaribu tena.";
+ });
 }
 function focusWord(){
  $("#focus-icon").textContent=selected.emoji;$("#focus-ar").textContent=selected.ar;
