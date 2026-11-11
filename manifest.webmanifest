@@ -1,0 +1,17 @@
+{
+  "name": "AR Arabic Learning — عالم الحيوانات",
+  "short_name": "AR Arabic",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f7f5ee",
+  "theme_color": "#12372a",
+  "description": "Learn Arabic animal vocabulary in Arabic, Kiswahili and English.",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
