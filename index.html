@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#12372a"><meta name="description" content="Learn Arabic animal vocabulary in Arabic, Kiswahili and English with pronunciation and interactive practice."><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/icon.svg" type="image/svg+xml"><title>AR Arabic Learning | عالم الحيوانات</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"><script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@3.4.7/aframe/build/aframe-ar.js"></script><script src="app.js" defer></script></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#12372a"><meta name="description" content="Learn Arabic animal vocabulary in Arabic, Kiswahili and English with pronunciation and interactive practice."><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/icon.svg" type="image/svg+xml"><title>AR Arabic Learning | عالم الحيوانات</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"><script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script><script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.7/aframe/build/aframe-ar.js"></script><script src="app.js" defer></script></head>
 <body><a class="skip-link" href="#main">Skip to lesson</a><header class="topbar"><a class="brand" href="#"><span class="brand-mark">ع</span><span>AR <b>Arabic Learning</b></span></a><nav class="top-nav" aria-label="Main navigation"><a href="#lesson">Lesson</a><a href="#ar">AR Lab</a><a href="#quiz">Quiz</a></nav><span class="level">SECONDARY • BEGINNER</span></header>
 <main id="main"><section class="hero"><div class="hero-copy"><p class="eyebrow">LEARN • SEE • SPEAK</p><h1>Discover the world<br>of <em>animals</em></h1><p class="hero-sub" lang="ar" dir="rtl">تَعَلَّمْ أَسْمَاءَ الْحَيَوَانَاتِ بِاللُّغَةِ الْعَرَبِيَّةِ</p><p class="hero-sub translated">Jifunze majina ya wanyama kwa Kiarabu kupitia picha, matamshi na mazoezi shirikishi.</p><a class="primary-btn" href="#lesson">Start learning <span>→</span></a></div><div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="animal-emoji">🦁</div><div class="art-caption">عَالَمُ الْحَيَوَانَاتِ</div></div></section>
 <section id="lesson" class="section"><div class="section-heading"><div><p class="eyebrow">YOUR FIRST LESSON</p><h2>Meet the animals <span lang="ar">الحيوانات</span></h2><p class="section-description">Select a card to focus on a word. Listen to its Arabic pronunciation and compare all three languages. Suggested study time: 20 minutes.</p></div><span class="lesson-count">10 WORDS • 20 MIN</span></div><div id="animal-grid" class="animal-grid" aria-live="polite"></div><div class="word-focus" aria-live="polite"><div class="focus-icon" id="focus-icon">🦁</div><div class="focus-copy"><span class="eyebrow">WORD OF THE MOMENT</span><div class="focus-ar" id="focus-ar" lang="ar" dir="rtl">أَسَدٌ</div><div class="focus-translations" id="focus-translations">Lion · Simba</div><p id="focus-pronunciation">Pronunciation guide: asadun</p></div><button class="secondary-btn" id="focus-speak" type="button">▶ Listen</button></div></section>
@@ -10,20 +10,34 @@ window.startArabicAR = function () {
  const box=document.getElementById("ar-container");
  const start=document.getElementById("start-ar");
  const stop=document.getElementById("stop-ar");
- if(!window.AFRAME){status.textContent="AR library haijapakia. Angalia intaneti kisha jaribu tena.";return;}
- if(box.querySelector("a-scene")) return;
- status.textContent="Inaomba ruhusa ya kamera...";
+ if(!window.AFRAME){status.textContent="Maktaba ya A-Frame haijapakia. Angalia intaneti.";return;}
+ if(!window.AFRAME.components.arjs){status.textContent="Maktaba ya AR.js haijapakia. Subiri kidogo kisha jaribu tena.";return;}
  box.hidden=false;
- box.innerHTML='<a-scene embedded vr-mode-ui="enabled:false" renderer="logarithmicDepthBuffer:true" arjs="sourceType: webcam; facingMode: environment; debugUIEnabled: false;"><a-marker preset="hiro"><a-entity position="0 0 0"><a-box position="0 0.45 0" width="0.65" height="0.65" depth="0.65" color="#C98B36"></a-box><a-sphere position="0 0.95 0" radius="0.28" color="#D9A04B"></a-sphere><a-sphere position="-0.18 1.18 0.18" radius="0.09" color="#B8752D"></a-sphere><a-sphere position="0.18 1.18 0.18" radius="0.09" color="#B8752D"></a-sphere><a-text value="الأسد - SIMBA" align="center" color="#FFFFFF" width="3" position="0 1.55 0" rotation="-90 0 0"></a-text></a-entity></a-marker><a-entity camera></a-entity></a-scene>';
- const scene=box.querySelector("a-scene");
- const marker=box.querySelector("a-marker");
- marker.addEventListener("markerFound",()=>{status.textContent="Hongera! Alama imetambuliwa. Simba na jina la Kiarabu vinaonekana.";});
- marker.addEventListener("markerLost",()=>{status.textContent="Alama haionekani. Elekeza kamera tena kwenye alama ya Hiro.";});
- scene.addEventListener("loaded",()=>{status.textContent="Scene imepakiwa; inawasha kamera...";},{once:true});
- scene.addEventListener("camera-init",()=>{status.textContent="Kamera imewashwa. Elekeza kwenye alama ya Hiro.";});
- scene.addEventListener("camera-error",()=>{status.textContent="Kamera haikupatikana. Ruhusu kamera kwenye Chrome.";});
+ box.innerHTML="";
+ status.textContent="AR inaanza. Ruhusu kamera na subiri...";
+ const scene=document.createElement("a-scene");
+ scene.setAttribute("embedded","");
+ scene.setAttribute("vr-mode-ui","enabled:false");
+ scene.setAttribute("renderer","logarithmicDepthBuffer:true; colorManagement:true");
+ scene.setAttribute("arjs","sourceType: webcam; debugUIEnabled: false; trackingMethod: best;");
+ const marker=document.createElement("a-marker");
+ marker.setAttribute("preset","hiro");
+ marker.setAttribute("smooth","true");
+ marker.setAttribute("smoothCount","5");
+ const lion=document.createElement("a-entity");
+ lion.setAttribute("position","0 0 0");
+ lion.innerHTML='<a-sphere position="0 0.45 0" radius="0.32" color="#C98B36"></a-sphere><a-sphere position="0 0.91 0" radius="0.24" color="#D9A04B"></a-sphere><a-sphere position="-0.18 1.12 0" radius="0.10" color="#B8752D"></a-sphere><a-sphere position="0.18 1.12 0" radius="0.10" color="#B8752D"></a-sphere><a-sphere position="-0.09 0.94 0.21" radius="0.035" color="#111111"></a-sphere><a-sphere position="0.09 0.94 0.21" radius="0.035" color="#111111"></a-sphere><a-sphere position="0 0.82 0.24" radius="0.055" color="#24170F"></a-sphere><a-text value="الأسد" align="center" color="#FFFFFF" width="3" position="0 1.42 0" rotation="-90 0 0"></a-text>';
+ marker.appendChild(lion);
+ const camera=document.createElement("a-entity");
+ camera.setAttribute("camera","");
+ scene.appendChild(marker);scene.appendChild(camera);box.appendChild(scene);
+ marker.addEventListener("markerFound",()=>{status.textContent="Hongera! Hiro imetambuliwa. Simba wa 3D anatakiwa kuonekana.";});
+ marker.addEventListener("markerLost",()=>{status.textContent="Alama imepotea. Elekeza kamera kwenye Hiro tena.";});
+ scene.addEventListener("camera-init",()=>{status.textContent="Kamera imewashwa. Elekeza kwenye alama nzima ya Hiro.";});
+ scene.addEventListener("camera-error",()=>{status.textContent="Kamera haijaanza. Ruhusu kamera kwenye Chrome.";});
+ scene.addEventListener("arjs-video-loaded",()=>{status.textContent="Video ya kamera imepakiwa. Tafuta alama ya Hiro.";});
  start.hidden=true;stop.hidden=false;
- setTimeout(()=>{if(!scene.querySelector("video"))status.textContent="Kamera bado haijaanza. Hakikisha ruhusa ya kamera imeruhusiwa.";},7000);
+ setTimeout(()=>{if(status.textContent==="AR inaanza. Ruhusu kamera na subiri...")status.textContent="Bado tunasubiri kamera. Hakikisha ruhusa ya kamera imeruhusiwa.";},8000);
 };
 document.getElementById("start-ar").addEventListener("click",window.startArabicAR);
 document.getElementById("stop-ar").addEventListener("click",()=>{
