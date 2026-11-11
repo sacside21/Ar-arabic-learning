@@ -15,29 +15,38 @@ let selected=animals[0],qIndex=0,score=0,answered=false,completed=false;
 const order=[1,3,0,4,2,5,6,7,8,9];
 const $=s=>document.querySelector(s);
 const audioFiles={
- lion:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=660019c7e25d4ad38b930971a683eb45.mp3",
- elephant:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=509255fd4ebe46ee949f550567af3fd9.mp3",
- giraffe:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=f13fdddd607f43fbbf30c5bb62fadc5e.mp3",
- camel:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=51f8b3025bea4f8a980814a2b035108b.mp3",
- rabbit:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=18d9772d16dc4acda2f63e4d6d1669b0.mp3",
- zebra:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=6b394c61e8f345388fc4f064b7d80525.mp3",
- monkey:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=f03478c57af145398ec98a7ce31eda23.mp3",
- cow:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=d61882a9a89f46c6b047d601335b8acf.mp3",
- horse:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=3de47358084a4916ab515f0ee44287e9.mp3",
- goat:"https://resource2.heygen.ai/text_to_speech/b9ccc4a328b44d16a8d7f98c0a6a6f10/24c7556125674f17bc2c4904074827e5/id=f21b8e49398844d4a587f93bf8c72cf5.mp3"
+ lion:"./audio/01_asad.mp3",
+ elephant:"./audio/02_fil.mp3",
+ giraffe:"./audio/03_zarafa.mp3",
+ camel:"./audio/04_jamal.mp3",
+ rabbit:"./audio/05_arnab.mp3",
+ zebra:"./audio/06_himar_wahshi.mp3",
+ monkey:"./audio/07_qird.mp3",
+ cow:"./audio/08_baqara.mp3",
+ horse:"./audio/09_hisan.mp3",
+ goat:"./audio/10_maiz.mp3"
 };
 let currentAudio=null;
 function speak(word){
  const animal=animals.find(a=>a.ar===word)||selected;
  const audioUrl=audioFiles[animal.id];
- if(!audioUrl){$("#focus-pronunciation").textContent="Sauti haijapatikana.";return;}
  if(currentAudio){currentAudio.pause();currentAudio.currentTime=0;}
  currentAudio=new Audio(audioUrl);
- $("#focus-pronunciation").textContent="Mwalimu Bilal anatamka: "+animal.say.toUpperCase();
+ $("#focus-pronunciation").textContent="Inacheza sauti: "+animal.say.toUpperCase();
  currentAudio.play().then(()=>{
   currentAudio.onended=()=>{$("#focus-pronunciation").textContent="Sikiliza tena na urudie: "+animal.say.toUpperCase();};
  }).catch(()=>{
-  $("#focus-pronunciation").textContent="Sauti haikuweza kuchezwa. Angalia intaneti kisha jaribu tena.";
+  // Fallback: use the device's Arabic speech voice if the local recording is not yet available.
+  if("speechSynthesis" in window){
+   const utterance=new SpeechSynthesisUtterance(animal.ar);
+   utterance.lang="ar";
+   utterance.rate=0.82;
+   speechSynthesis.cancel();
+   speechSynthesis.speak(utterance);
+   $("#focus-pronunciation").textContent="Sauti ya kifaa: "+animal.say.toUpperCase();
+  }else{
+   $("#focus-pronunciation").textContent="Sauti haipatikani. Hakikisha faili za audio zimewekwa kwenye folda ya audio.";
+  }
  });
 }
 function focusWord(){
