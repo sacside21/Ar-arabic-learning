@@ -49,7 +49,7 @@ function focusWord(){
 }
 function renderCards(){
  const grid=$("#animal-grid");
- grid.innerHTML=animals.map(a=>'<article class="animal-card '+(a.id===selected.id?"active":"")+'" data-id="'+a.id+'"><button class="card-select" type="button" aria-pressed="'+(a.id===selected.id)+'" aria-label="Learn '+a.en+'"><div class="animal-icon">'+a.emoji+'</div><div class="animal-ar" lang="ar" dir="rtl">'+a.ar+'</div><div class="animal-en">'+a.en+'</div><div class="animal-sw">'+a.sw+'</div></button><button class="speak-btn" type="button" data-word="'+a.plain+'">▶ Hear Arabic</button></article>').join("");
+ grid.innerHTML=animals.map(a=>'<article class="animal-card '+(a.id===selected.id?"active":"")+'" data-id="'+a.id+'"><button class="card-select" type="button" aria-pressed="'+(a.id===selected.id)+'" aria-label="Learn '+a.en+'"><div class="animal-icon">'+a.emoji+'</div><div class="animal-ar" lang="ar" dir="rtl">'+a.ar+'</div><div class="animal-en">'+a.en+'</div><div class="animal-sw">'+a.sw+'</div></button><button class="speak-btn" type="button" data-word="'+a.ar+'">▶ Hear Arabic</button></article>').join("");
  grid.querySelectorAll(".card-select").forEach(b=>b.addEventListener("click",()=>{selected=animals.find(a=>a.id===b.closest("article").dataset.id);renderCards();focusWord()}));
  grid.querySelectorAll("[data-word]").forEach(b=>b.addEventListener("click",()=>speak(b.dataset.word)));
 }
