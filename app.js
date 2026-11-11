@@ -15,12 +15,32 @@ let selected=animals[0],qIndex=0,score=0,answered=false,completed=false;
 const order=[1,3,0,4,2,5,6,7,8,9];
 const $=s=>document.querySelector(s);
 function speak(word){
- if(!("speechSynthesis"in window)){ $("#focus-pronunciation").textContent="Audio is not supported by this browser. Read the pronunciation guide above."; return; }
- speechSynthesis.cancel();
- const u=new SpeechSynthesisUtterance(word);u.lang="ar-SA";u.rate=.78;
- const voices=speechSynthesis.getVoices();const v=voices.find(x=>x.lang.toLowerCase().startsWith("ar"));if(v)u.voice=v;
- u.onerror=()=>{$("#focus-pronunciation").textContent="If audio is unavailable, use the pronunciation guide: "+selected.say;};
- speechSynthesis.speak(u);
+ const guide="Matamshi ya kuongoza: "+selected.say;
+ if(!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)){
+  $("#focus-pronunciation").textContent="Kivinjari hiki hakina huduma ya sauti. "+guide;return;
+ }
+ const synth=window.speechSynthesis;
+ synth.cancel();
+ $("#focus-pronunciation").textContent="Inatafuta sauti ya Kiarabu…";
+ const sayNow=()=>{
+  const voices=synth.getVoices();
+  const voice=voices.find(v=>/^ar([_-]|$)/i.test(v.lang)) || voices.find(v=>v.lang.toLowerCase().includes("ar"));
+  const utterance=new SpeechSynthesisUtterance(word);
+  utterance.lang=voice?voice.lang:"ar-SA";
+  if(voice)utterance.voice=voice;
+  utterance.rate=0.78;utterance.pitch=1;
+  utterance.onstart=()=>{$("#focus-pronunciation").textContent="Inasoma kwa sauti ya Kiarabu…";};
+  utterance.onend=()=>{$("#focus-pronunciation").textContent="Imemaliza kusoma. "+guide;};
+  utterance.onerror=()=>{$("#focus-pronunciation").textContent="Sauti haijapatikana. "+guide+" Hakikisha Arabic voice imewekwa kwenye simu.";};
+  synth.speak(utterance);
+ };
+ if(synth.getVoices().length){sayNow();}
+ else{
+  let done=false;
+  const finish=()=>{if(done)return;done=true;synth.removeEventListener("voiceschanged",finish);sayNow();};
+  synth.addEventListener("voiceschanged",finish);
+  setTimeout(finish,1200);
+ }
 }
 function focusWord(){
  $("#focus-icon").textContent=selected.emoji;$("#focus-ar").textContent=selected.ar;
@@ -33,7 +53,7 @@ function renderCards(){
  grid.querySelectorAll(".card-select").forEach(b=>b.addEventListener("click",()=>{selected=animals.find(a=>a.id===b.closest("article").dataset.id);renderCards();focusWord()}));
  grid.querySelectorAll("[data-word]").forEach(b=>b.addEventListener("click",()=>speak(b.dataset.word)));
 }
-$("#focus-speak").addEventListener("click",()=>speak(selected.plain));
+$("#focus-speak").addEventListener("click",()=>speak(selected.ar));
 function updateScore(){
  $("#progress-label").textContent=score+" / 10 correct";
  $("#progress-bar").style.width=(score/10*100)+"%";
