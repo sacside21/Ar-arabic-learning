@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#12372a">
+  <meta name="description" content="Learn Arabic animal vocabulary through interactive augmented reality.">
+  <title>AR Arabic Learning | عالم الحيوانات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="AR Arabic Learning home"><span class="brand-mark">ع</span><span>AR <b>Arabic Learning</b></span></a>
+    <span class="level">SECONDARY • BEGINNER</span>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">LEARN • SEE • SPEAK</p>
+        <h1>Discover the world<br>of <em>animals</em></h1>
+        <p class="hero-sub">تعلم أسماء الحيوانات باللغة العربية باستخدام الواقع المعزز</p>
+        <p class="hero-sub translated">Jifunze majina ya wanyama kwa Kiarabu kupitia teknolojia ya uhalisia ulioboreshwa.</p>
+        <a class="primary-btn" href="#lesson">Start learning <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="animal-emoji">🦁</div><div class="art-caption">عَالَمُ الْحَيَوَانَاتِ</div></div>
+    </section>
+
+    <section id="lesson" class="section">
+      <div class="section-heading"><div><p class="eyebrow">YOUR FIRST LESSON</p><h2>Meet the animals <span>الحيوانات</span></h2></div><span class="lesson-count">05 WORDS</span></div>
+      <div id="animal-grid" class="animal-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="ar-panel" id="ar">
+      <div class="ar-intro"><p class="eyebrow">AUGMENTED REALITY</p><h2>Bring learning to life</h2><p>Choose an animal, then scan its matching printed learning card with your camera to see a 3D learning scene.</p><p class="note">AR image tracking needs a compiled target-card file. The lesson and vocabulary work without camera access.</p></div>
+      <div class="ar-actions"><button id="scan-button" class="primary-btn" type="button">Open AR camera <span>↗</span></button><button id="stop-button" class="secondary-btn" type="button" hidden>Close camera</button><p id="camera-status" class="status" role="status">Camera is off. Select an animal to begin.</p></div>
+      <div id="ar-container" class="ar-container" hidden>
+        <a-scene id="ar-scene" embedded mindar-image="imageTargetSrc: assets/targets.mind; autoStart: false;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+          <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+          <a-entity id="tracked-content" mindar-image-target="targetIndex: 0">
+            <a-box position="0 0.25 0" depth="0.25" height="0.5" width="0.35" color="#d9a441"></a-box>
+            <a-sphere position="0 0.65 0" radius="0.22" color="#e8bd72"></a-sphere>
+            <a-text id="ar-label" value="أَسَدٌ" align="center" color="#ffffff" position="0 -0.1 0.1" width="2"></a-text>
+          </a-entity>
+        </a-scene>
+      </div>
+    </section>
+
+    <section class="quiz-section">
+      <div><p class="eyebrow">CHECK YOUR PROGRESS</p><h2>Quick vocabulary quiz</h2><p>Choose the correct Arabic word for the animal shown.</p></div>
+      <div class="quiz-card"><div id="quiz-animal" class="quiz-animal">🐘</div><div id="quiz-question" class="quiz-question">What is “elephant” in Arabic?</div><div id="quiz-options" class="quiz-options"></div><p id="quiz-feedback" class="feedback" role="status"></p><button id="next-question" class="secondary-btn" type="button">Next question →</button></div>
+    </section>
+  </main>
+  <footer><span>AR Arabic Learning</span><span>Made for interactive Arabic education</span></footer>
+</body>
+</html>
