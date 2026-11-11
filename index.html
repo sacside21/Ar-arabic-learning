@@ -13,7 +13,10 @@ window.startArabicAR = function () {
  box.hidden=false;
  box.innerHTML='<a-scene embedded vr-mode-ui="enabled:false" renderer="logarithmicDepthBuffer:true;" arjs="sourceType: webcam; facingMode: environment; debugUIEnabled:true;"><a-marker preset="hiro"><a-entity position="0 0.25 0"><a-sphere position="0 0.65 0" radius="0.42" color="#C98B36"></a-sphere><a-sphere position="0 1.05 0" radius="0.27" color="#D9A04B"></a-sphere><a-sphere position="-0.25 1.08 0" radius="0.12" color="#B8752D"></a-sphere><a-sphere position="0.25 1.08 0" radius="0.12" color="#B8752D"></a-sphere><a-sphere position="-0.1 1.1 0.23" radius="0.035" color="#171717"></a-sphere><a-sphere position="0.1 1.1 0.23" radius="0.035" color="#171717"></a-sphere><a-text value="الأسد - SIMBA" align="center" color="#FFFFFF" width="4" position="0 1.55 0" rotation="-90 0 0"></a-text></a-entity></a-marker><a-entity camera></a-entity></a-scene>';
  const scene=box.querySelector("a-scene");
- scene.addEventListener("loaded",()=>{status.textContent="AR imeandaliwa. Ruhusu kamera na elekeza kwenye alama ya Hiro.";},{once:true});
+ const marker=box.querySelector("a-marker");
+ marker.addEventListener("markerFound",()=>{status.textContent="Alama imetambuliwa! Unaona simba na jina lake la Kiarabu.";});
+ marker.addEventListener("markerLost",()=>{status.textContent="Alama haionekani tena. Ielekeze tena kamera kwenye alama.";});
+ scene.addEventListener("loaded",()=>{status.textContent="Kamera imeanza. Mfumo unasubiri kuitambua alama ya Hiro.";},{once:true});
  scene.addEventListener("camera-error",()=>{status.textContent="Kamera imekataliwa au haipatikani. Ruhusu kamera kwenye mipangilio ya Chrome.";});
  start.hidden=true;stop.hidden=false;
 };
