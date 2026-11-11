@@ -104,3 +104,20 @@ $("#next-question").addEventListener("click",()=>{
 });
 $("#reset-quiz").addEventListener("click",()=>{qIndex=0;score=0;completed=false;updateScore();renderQuiz()});
 renderCards();focusWord();renderQuiz();updateScore();
+
+
+const startAR=$("#start-ar"),stopAR=$("#stop-ar"),arBox=$("#ar-container"),arStatus=$("#ar-status");
+if(startAR&&arBox){
+ startAR.addEventListener("click",()=>{
+  arBox.hidden=false;startAR.hidden=true;stopAR.hidden=false;
+  arStatus.textContent="Kamera inaanza. Ruhusu ruhusa ya kamera na elekeza kwenye alama ya Hiro.";
+  const scene=arBox.querySelector("a-scene");
+  if(scene&&scene.hasLoaded){scene.play();}
+ });
+ stopAR.addEventListener("click",()=>{
+  const scene=arBox.querySelector("a-scene");
+  if(scene){const video=scene.querySelector("video");if(video&&video.srcObject)video.srcObject.getTracks().forEach(t=>t.stop());}
+  arBox.hidden=true;startAR.hidden=false;stopAR.hidden=true;
+  arStatus.textContent="Kamera imefungwa. Bonyeza Anza AR camera kujaribu tena.";
+ });
+}
