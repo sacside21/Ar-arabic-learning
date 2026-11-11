@@ -11,7 +11,7 @@ const animals=[
 {id:"horse",en:"Horse",sw:"Farasi",ar:"حِصَانٌ",plain:"حصان",emoji:"🐎",say:"hisaanun"},
 {id:"goat",en:"Goat",sw:"Mbuzi",ar:"مَاعِزٌ",plain:"ماعز",emoji:"🐐",say:"maaizun"}
 ];
-let selected=animals[0],qIndex=0,score=0,answered=false;
+let selected=animals[0],qIndex=0,score=0,answered=false,completed=false;
 const order=[1,3,0,4,2,5,6,7,8,9];
 const $=s=>document.querySelector(s);
 function speak(word){
@@ -59,6 +59,7 @@ function renderQuiz(){
  }));
 }
 function showResults(){
+ completed=true;
  $("#question-number").textContent="LESSON COMPLETE";
  $("#quiz-animal").textContent=score>=8?"🏆":"📘";
  $("#quiz-question").textContent="You scored "+score+" out of 10";
@@ -70,9 +71,9 @@ function showResults(){
  $("#next-question").disabled=false;
 }
 $("#next-question").addEventListener("click",()=>{
+ if(completed){qIndex=0;score=0;completed=false;updateScore();renderQuiz();return;}
  if(qIndex===9&&answered){showResults();return;}
- if(qIndex===9&&!answered){qIndex=0;score=0;updateScore();renderQuiz();return;}
  qIndex++;renderQuiz();
 });
-$("#reset-quiz").addEventListener("click",()=>{qIndex=0;score=0;updateScore();renderQuiz()});
+$("#reset-quiz").addEventListener("click",()=>{qIndex=0;score=0;completed=false;updateScore();renderQuiz()});
 renderCards();focusWord();renderQuiz();updateScore();
